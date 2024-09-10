@@ -21,7 +21,7 @@ def driver():
     driver.quit()
 
 
-def test_badgeVerification(driver):
+def atest_badgeVerification(driver):
     username = driver.find_element(By.ID, "user-name")
     username.send_keys("standard_user")
 
@@ -69,3 +69,73 @@ def test_badgeVerification(driver):
     assert mensagemFinal == "Thank you for your order!"
     
     sleep(5)
+
+def atest_LoginWithoutPassword(driver):
+    username = driver.find_element(By.XPATH, "//input[@id='user-name']")
+    username.send_keys("locked_out_user")
+
+    loginButton = driver.find_element(By.XPATH, "//input[@type='submit']")
+    loginButton.click()
+
+    mensagemDeErro = driver.find_element(By.XPATH, "//h3[@data-test='error']").text
+    assert mensagemDeErro == "Epic sadface: Password is required"
+
+def atest_ContinueShoppingButtonvalidation(driver):
+    username = driver.find_element(By.XPATH, "//input[@name='user-name']")
+    username.send_keys("standard_user")
+
+    password = driver.find_element(By.XPATH, "//input[@placeholder='Password']")
+    password.send_keys("secret_sauce")
+
+    loginButton = driver.find_element(By.ID, "login-button")
+    loginButton.click()
+
+    buttonsAddToCart = driver.find_elements(By.XPATH, "//button[text()='Add to cart']")
+    for button in buttonsAddToCart:
+        button.click()
+
+    cart = driver.find_element(By.XPATH, "//div[@class='shopping_cart_container']")
+    cart.click()
+
+    ContinueShoppoingButton = driver.find_element(By.XPATH, "//button[@name='continue-shopping']")
+    ContinueShoppoingButton.click()
+
+    Titulo = driver.find_element(By.XPATH, "//div[@class='app_logo']").text
+    assert Titulo == "Swag Labs"
+
+def test_ResetAppStateButton(driver):
+    username = driver.find_element(By.XPATH, "//input[@name='user-name']")
+    username.send_keys("standard_user")
+
+    password = driver.find_element(By.XPATH, "//input[@placeholder='Password']")
+    password.send_keys("secret_sauce")
+
+    loginButton = driver.find_element(By.ID, "login-button")
+    loginButton.click()
+
+    buttonsAddToCart = driver.find_elements(By.XPATH, "//button[text()='Add to cart']")
+    for button in buttonsAddToCart:
+        button.click()
+    
+    QuantElementos = driver.find_element(By.CLASS_NAME, "shopping_cart_badge").text
+    assert QuantElementos == "6"
+
+    sleep(3)
+
+    burgerButton = driver.find_element(By.XPATH, "//button[@id='react-burger-menu-btn']")
+    burgerButton.click()
+
+    sleep(1)
+
+    # ResetAppStateButton = driver.find_element(By.XPATH, "//a[@id='reset_sidebar_link']")
+    # ResetAppStateButton = driver.find_element(By.XPATH, "//a[text()='Reset App State']").text
+    ResetAppStateButton = driver.find_element(By.ID, "reset_sidebar_link")
+    ResetAppStateButton.click()
+    sleep(10)
+
+    # BotaoPraFecharMenu = driver.find_element(By.XPATH, "//button[@id='react-burger-cross-btn']")
+    BotaoPraFecharMenu = driver.find_element(By.ID, "react-burger-cross-btn")
+    BotaoPraFecharMenu.click()
+
+    # QuantElementos = driver.find_element(By.CLASS_NAME, "shopping_cart_badge").text
+    # assert QuantElementos == ""
