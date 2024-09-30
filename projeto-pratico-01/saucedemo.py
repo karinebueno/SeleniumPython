@@ -137,5 +137,8 @@ def test_ResetAppStateButton(driver):
     BotaoPraFecharMenu = driver.find_element(By.ID, "react-burger-cross-btn")
     BotaoPraFecharMenu.click()
 
-    # QuantElementos = driver.find_element(By.CLASS_NAME, "shopping_cart_badge").text
-    # assert QuantElementos == ""
+    # find_elements -> retorna sempre uma lista, se nao retornar nada significa que a lista esta vazia
+    CoisasNoCart = driver.find_elements(By.XPATH, "//span[@class='shopping_cart_badge']")
+    # verifica o tamanho da lista
+    tamanho = len(CoisasNoCart)
+    assert tamanho == 0
