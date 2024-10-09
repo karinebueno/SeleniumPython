@@ -4,9 +4,13 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from time import sleep
 import pytest
-from pages.base_page import BasePage
-from pages.etapa1_page import Etapa1Page
+from pages.base_page_sauce import BasePage
+from pages.etapa1_page_sauce import Etapa1Page
+from pages.etapa2_page_sauce import Etapa2Page
 
+
+
+#Page Factory
 @pytest.fixture()
 def driver():
     chrome_options = Options()
@@ -21,16 +25,26 @@ def driver():
     driver.quit()
 
 def test_login(driver):
+    #Login na Etapa 1
     etapa1 = Etapa1Page(driver)
     etapa1.preencher_etapa1("standard_user", "secret_sauce")
 
-    final = Etapa2Page(driver)
-    msg = final.obterMensagem()
-
-    assert msg == "6"
+    #Adicionar itens ao carrinho na Etapa 2
+    etapa2 = Etapa2Page(driver)
+    etapa2.adicionar_todos_ao_carrinho()
 
     sleep(5)
 
+    #Verificar a quantidade no badge
+    quantidade = etapa2.obter_quantidade_no_carrinho()
+    assert quantidade == "6"
 
+    #Acessar o carrinho e remover um item
+    etapa2.acessar_carrinho()
+    etapa2.remover_item_do_carrinho()
 
+    #Verificar a quantidade após remover
+    quantidade_apos_remover = etapa2.obter_quantidade_no_carrinho()
+    assert quantidade_apos_remover == "5"
 
+    sleep(5)
