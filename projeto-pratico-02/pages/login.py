@@ -3,7 +3,7 @@ from pages.base_page_sauce import BasePage
 from time import sleep
 from seleniumpagefactory import PageFactory
 
-class Etapa1Page(BasePage, PageFactory):
+class LoginPage(BasePage, PageFactory):
 
     locators = {
         "USERNAME": (By.ID, "user-name"),
